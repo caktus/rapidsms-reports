@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import datetime
 
 from django.db import models
 
@@ -23,11 +24,17 @@ class Report(models.Model):
     global_provider_id = models.CharField(max_length=255, null=True, blank=True)
     global_patient_id = models.CharField(max_length=255, null=True, blank=True)
 
+    # In the near future, we will want to incorporate the rapidsms facilities registry.
+
+    # The date of the event that the report describes.
+    data_date = models.DateField(null=True, blank=True, default=datetime.date.today)
+
     class Meta:
         abstract = True
+        ordering = ['-data_date']
 
     def __unicode__(self):
-        return 'Report on {0}'.format(self.created.date())
+        return 'Report created {0}'.format(self.created.date())
 
     def cancel(self, save=True):
         """Cancels this report if it is currently active."""
@@ -39,8 +46,8 @@ class Report(models.Model):
     def patient(self):
         """Retrieves the patient record associated with this report.
 
-        If the caller requires that the patient record actually exist, it must
-        ensure that the return value is not None.
+        This method returns None if self.global_patient_id is None, or if no
+        patient exists with the identifier self.global_patient_id.
         """
         if not hasattr(self, '_patient'):
             if not self.global_patient_id:
@@ -56,8 +63,8 @@ class Report(models.Model):
     def provider(self):
         """Retrieves the provider record associated with this report.
 
-        If the caller requires that the provider record actually exist, it
-        must ensure that the return value is not None.
+        This method returns None if self.global_provider_id is None, or if no
+        provider exists with the identifier self.global_provider_id.
         """
         if not hasattr(self, '_provider'):
             if not self.global_provider_id:

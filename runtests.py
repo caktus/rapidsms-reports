@@ -13,6 +13,7 @@ if not settings.configured:
                 'NAME': ':memory:',
             }
         },
+        HEALTHCARE_STORAGE_BACKEND='healthcare.backends.dummy.DummyStorage',
         INSTALLED_APPS=(
             'rapidsms',
             'healthcare',
