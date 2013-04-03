@@ -14,8 +14,12 @@ if not settings.configured:
             }
         },
         INSTALLED_APPS=(
+            'rapidsms',
+            'healthcare',
+            'healthcare.backends.dummy',
             'reports',
         ),
+        PROJECT_NAME='Reports Test',
         SITE_ID=1,
         SECRET_KEY='this-is-just-for-tests-so-not-that-secret',
     )
